@@ -119,6 +119,28 @@
             line-height: 1.5;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
+
+        /* Link and Copy button */
+        .copy-container {
+            margin-top: 20px;
+            text-align: center;
+            z-index: 20;
+        }
+
+        .copy-container a {
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .copy-button {
+            padding: 10px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -144,7 +166,6 @@
             "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/3.png",
             "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/4.png",
             "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/5.png",
-            "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/6.png"
         ];
 
         // Pick a random image
@@ -189,8 +210,34 @@
             // Create the paragraph text
             const rickRolledParagraph = document.createElement("div");
             rickRolledParagraph.classList.add("rick-rolled-paragraph");
-            rickRolledParagraph.innerText = "Yeah... this 'news' website is fake and it's just a rick-roll site.";
+            rickRolledParagraph.innerText = "Yeah... this 'news' site is fake and it's just a rick-roll site lol";
             document.body.appendChild(rickRolledParagraph);
+
+            // Create the link and copy button
+            const copyContainer = document.createElement("div");
+            copyContainer.classList.add("copy-container");
+
+            const link = document.createElement("a");
+            link.href = "bit.ly/Kcir-news";
+            link.target = "_blank";
+            link.innerText = "bit.ly/Kcir-news";
+
+            const copyButton = document.createElement("button");
+            copyButton.classList.add("copy-button");
+            copyButton.innerText = "Copy";
+
+            // Copy to clipboard functionality
+            copyButton.onclick = function () {
+                navigator.clipboard.writeText("https://bit.ly/Kcir-news").then(function() {
+                    alert("Link copied");
+                }, function() {
+                    alert("Failed to copy link.");
+                });
+            };
+
+            copyContainer.appendChild(link);
+            copyContainer.appendChild(copyButton);
+            document.body.appendChild(copyContainer);
         }
     </script>
 
