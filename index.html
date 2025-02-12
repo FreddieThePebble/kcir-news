@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kcir News</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: white;
+            overflow: hidden;
+            flex-direction: column; /* Allows stacking content vertically */
+        }
+
+        .image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensures the whole image fits without cropping */
+            filter: blur(5px); /* Keep image blurred permanently */
+        }
+
+        /* Fullscreen blur and darkness */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            backdrop-filter: blur(5px) brightness(50%);
+            background: rgba(0, 0, 0, 0.3);
+            transition: backdrop-filter 0.5s ease-in-out, background 0.5s ease-in-out;
+            z-index: 5;
+        }
+
+        .tos-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .tos-popup button {
+            margin-top: 10px;
+            padding: 10px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tos-popup .decline-button {
+            background: red;
+        }
+
+        /* Video styling */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 20;
+        }
+
+        .video-container video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            pointer-events: none; /* Disable interaction with the video */
+        }
+
+        /* "Get Rick Rolled" text */
+        .rick-rolled-text {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            z-index: 20;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Paragraph styling */
+        .rick-rolled-paragraph {
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            z-index: 20;
+            max-width: 80%;
+            line-height: 1.5;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="image-container">
+        <img id="randomImage" alt="Random Image">
+    </div>
+
+    <!-- Fullscreen blur & darkness -->
+    <div class="overlay" id="overlay"></div>
+
+    <div class="tos-popup" id="tosPopup">
+        <p>To view this article, please accept the following <a href="https://github.com/FreddieThePebble/kcir-news/tree/main" target="_blank">Terms and Conditions</a>.</p>
+        <button onclick="acceptTOS()">Accept</button>
+        <button class="decline-button" onclick="declineTOS()">Decline</button>
+    </div>
+
+    <script>
+        // List of image URLs
+        const images = [
+            "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/1.png",
+            "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/2.png",
+            "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/3.png",
+            "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/4.png",
+            "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/5.png",
+            "https://raw.githubusercontent.com/FreddieThePebble/kcir-news/refs/heads/main/images/6.png"
+        ];
+
+        // Pick a random image
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+
+        // Set the image source
+        document.getElementById("randomImage").src = randomImage;
+
+        function acceptTOS() {
+            // Hide the TOS popup and overlay
+            document.getElementById("tosPopup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+
+            // Create a video element and add it to the page
+            const videoContainer = document.createElement("div");
+            videoContainer.classList.add("video-container");
+
+            const video = document.createElement("video");
+            video.src = "https://github.com/FreddieThePebble/kcir-news/raw/refs/heads/main/video.mp4";
+            video.autoplay = true;
+            video.onended = showRickRolledText; // Call function when video ends
+            video.muted = false;  // Video with volume enabled
+            video.loop = false;   // Video will not loop
+            video.controls = false;  // Remove video controls
+            videoContainer.appendChild(video);
+            document.body.appendChild(videoContainer);
+        }
+
+        function declineTOS() {
+            // Hide the TOS popup and overlay
+            document.getElementById("tosPopup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function showRickRolledText() {
+            // Create the "Get Rick Rolled" text
+            const rickRolledText = document.createElement("div");
+            rickRolledText.classList.add("rick-rolled-text");
+            rickRolledText.innerText = "Get Rick Rolled!";
+            document.body.appendChild(rickRolledText);
+
+            // Create the paragraph text
+            const rickRolledParagraph = document.createElement("div");
+            rickRolledParagraph.classList.add("rick-rolled-paragraph");
+            rickRolledParagraph.innerText = "Yeah... this 'news' website is fake and it's just a rick-roll site.";
+            document.body.appendChild(rickRolledParagraph);
+        }
+    </script>
+
+</body>
+</html>
